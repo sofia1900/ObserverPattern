@@ -7,7 +7,6 @@ import com.sofia.observerpattern.domain.GetAllSuperHeroesUseCase
 import com.sofia.observerpattern.domain.Hero
 import com.sofia.observerpattern.observer.Observer
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 //Nofificador.
@@ -45,10 +44,8 @@ class MainViewModel(private val useCase: GetAllSuperHeroesUseCase) : ViewModel()
         notifyObservers()
     }
 
-    /*
-    Notificar a los suscriptores en el hilo principal
-    para que la vista se pueda actualizar
-     */
+    /* Notificar a los suscriptores en el hilo principal
+    para que la vista se pueda actualizar */
     private fun notifyObservers() {
         viewModelScope.launch {
             for (observer in observers) {
