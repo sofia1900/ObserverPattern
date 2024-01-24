@@ -47,8 +47,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
 
-    val lifecycle_version = "2.7.0"
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.activity:activity-ktx:1.8.2")
 
     //Skeleton Layout
     implementation("com.faltenreich:skeletonlayout:5.0.0")

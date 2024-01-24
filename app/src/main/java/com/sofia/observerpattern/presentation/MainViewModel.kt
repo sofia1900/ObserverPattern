@@ -21,25 +21,25 @@ class MainViewModel(private val useCase: GetAllSuperHeroesUseCase) : ViewModel()
     //Acción que provoca el cambio y lo notifica
     fun getDog() {
         responseLoading()
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             useCase().fold(
-                {responseError(it)},
-                {responseSuccess(it.first())}
+                { responseError(it) },
+                { responseSuccess(it.first()) }
             )
         }
     }
 
-    private fun responseLoading (){
+    private fun responseLoading() {
         uiState = UiState(isLoading = true)
         notifyObservers()
     }
 
-    private fun responseError (error : ErrorApp){
+    private fun responseError(error: ErrorApp) {
         uiState = UiState(error = error)
         notifyObservers()
     }
 
-    private fun responseSuccess (hero: Hero){
+    private fun responseSuccess(hero: Hero) {
         uiState = UiState(hero = hero)
         notifyObservers()
     }

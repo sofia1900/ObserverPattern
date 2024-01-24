@@ -34,11 +34,11 @@ class MainActivity : AppCompatActivity(), Observer {
 
     override fun update() {
         viewModel.uiState.apply {
-            if (this.isLoading){
+            if (isLoading){
                 binding.skeletonLayout.showSkeleton()
             }else{
                 binding.skeletonLayout.showOriginal()
-                if (this.error != null){
+                if (error != null){
                     Snackbar.make(binding.root, getString(R.string.snackbar_error), Snackbar.LENGTH_SHORT).show()
                 }else{
                     hero?.apply {
