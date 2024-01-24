@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ObserverPattern</string>
+    <string name="snackbar_error">Ha ocurrido un error</string>
 </resources>

@@ -1,39 +1,69 @@
 package com.sofia.observerpattern.presentation
 
 import androidx.lifecycle.ViewModel
-import com.sofia.observerpattern.domain.Dog
-import com.sofia.observerpattern.domain.GetDogUseCase
+import androidx.lifecycle.viewModelScope
+import com.sofia.observerpattern.app.ErrorApp
+import com.sofia.observerpattern.domain.GetAllSuperHeroesUseCase
+import com.sofia.observerpattern.domain.Hero
 import com.sofia.observerpattern.observer.Observer
-import com.sofia.observerpattern.observer.Subject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainViewModel (private val useCase: GetDogUseCase): ViewModel(), Subject {
+//Nofificador.
+class MainViewModel(private val useCase: GetAllSuperHeroesUseCase) : ViewModel() {
 
-    //Servicio a observar - generador de eventos - es lo que cambia
+    //Estado que va cambiando
+    var uiState: UiState = UiState()
 
+    //Lista de observadores/suscriptores
     private val observers = mutableListOf<Observer>()
-    var uiState : UiState = UiState()
 
-    override fun addObserver(observer: Observer) {
-        observers.add(observer)
+    //Acción que provoca el cambio y lo notifica
+    fun getDog() {
+        responseLoading()
+        viewModelScope.launch(Dispatchers.IO){
+            val response = useCase().fold(
+                {responseError(it)},
+                {responseSuccess(it.first())}
+            )
+        }
     }
-    override fun removeObserver(observer: Observer) {
-        observers.remove(observer)
+
+    private fun responseLoading (){
+        uiState = UiState(isLoading = true)
+        notifyObservers()
     }
-     override fun notifyObservers(){
+
+    private fun responseError (error : ErrorApp){
+        uiState = UiState(error = error)
+        notifyObservers()
+    }
+
+    private fun responseSuccess (hero: Hero){
+        uiState = UiState(hero = hero)
+        notifyObservers()
+    }
+
+    //Notificar a los suscriptores
+    private fun notifyObservers() {
         for (observer in observers) {
             observer.update()
         }
     }
 
-    fun getDog() {
-        val dog = useCase.getDog()
-        uiState = UiState(dog = dog)
-        notifyObservers()
+    //Suscribirse
+    fun addObserver(observer: Observer) {
+        observers.add(observer)
     }
 
-    data class UiState (
-        val isLoading : Boolean = false,
-        val isError : Boolean = false,
-        val dog : Dog? = null
+    //Eliminar la suscripcion
+    fun removeObserver(observer: Observer) {
+        observers.remove(observer)
+    }
+
+    data class UiState(
+        val isLoading: Boolean = false,
+        val error: ErrorApp? = null,
+        val hero: Hero? = null
     )
 }
