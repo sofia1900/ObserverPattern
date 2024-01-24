@@ -22,7 +22,7 @@ class MainViewModel(private val useCase: GetAllSuperHeroesUseCase) : ViewModel()
     fun getDog() {
         responseLoading()
         viewModelScope.launch(Dispatchers.IO){
-            val response = useCase().fold(
+            useCase().fold(
                 {responseError(it)},
                 {responseSuccess(it.first())}
             )
