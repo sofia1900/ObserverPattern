@@ -19,7 +19,7 @@ class MainViewModel(private val useCase: GetAllSuperHeroesUseCase) : ViewModel()
     private val observers = mutableListOf<Observer>()
 
     //Acción que provoca el cambio y lo notifica
-    fun getDog() {
+    fun getHero() {
         responseLoading()
         viewModelScope.launch(Dispatchers.IO) {
             useCase().fold(

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), Observer {
 
     private fun bind(){
         viewModel.addObserver(this)
-        viewModel.getDog()
+        viewModel.getHero()
     }
 
     override fun update() {
